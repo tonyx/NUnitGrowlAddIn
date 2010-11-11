@@ -11,7 +11,7 @@ e.g.  : C:\Program Files (x86)\NUnit 2.5.7\bin\net-2.0\addins
 
 Tested on nunit 2.5.7.
 
-Should work in other version, if you put the nunit.core.dll, nunit.core.interfaces.dll, nunit.framework.dll
+Should work in other version, if you put the correct version of nunit.core.dll, nunit.core.interfaces.dll, nunit.framework.dll on the lib directory, and rebuild.
 
 
 
