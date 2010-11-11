@@ -19,6 +19,7 @@ using NUnitGrowlAddIn.Properties;
 
 /*
  * copyright (c) Antonio Lucca 2010.
+ * _do_what_you_want_ license
  * tonyx1@gmail.com
  * 
  */
