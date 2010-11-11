@@ -17,10 +17,16 @@ using NUnit.Core.Extensibility;
 using NUnitGrowlAddIn.Properties;
 
 
+/*
+ * copyright (c) Antonio Lucca 2010.
+ * tonyx1@gmail.com
+ * 
+ */
+
 namespace NUnitGrowlAddIn
 {
 
-    [NUnitAddin(Type = (NUnit.Core.Extensibility.ExtensionType)1, Name = "NUnit", Description = "NUnit Add-in that sends notifications about test runs to Growl.")]
+    [NUnitAddin(Type = (NUnit.Core.Extensibility.ExtensionType)1, Name = "NUnit", Description = "NUnit Add-in that sends test results to Growl.")]
     public sealed class NUnitGrowlAddIn : IAddin, EventListener
     {
 
