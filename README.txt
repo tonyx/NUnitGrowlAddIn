@@ -5,8 +5,12 @@ msbuild NUnitGrowlAddin.sln /p:Configuration=Debug /p:Platform="Any CPU"
 
 to install the project:
 put the NunitGrowlAddin.dll, the NunitGrowlAddIn.pdb files and the Resource directory  NUNIT-INSTALLATIONPATH\bin\net-2.0\addins
+put there also:
 
-e.g.  : C:\Program Files (x86)\NUnit 2.5.7\bin\net-2.0\addins
+Growl.Connector.dll
+Growl.CoreLibrary.dll
+
+
 
 
 Tested on nunit 2.5.7.
