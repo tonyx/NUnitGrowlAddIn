@@ -11,14 +11,12 @@ Growl.Connector.dll
 Growl.CoreLibrary.dll
 
 
-
-
 Tested on nunit 2.5.7.
 
-note: I had troubles in nunit 2.5.8.
-I also had troubles in building the assembilies on different machines, so I included also the pre-build binaries, just in case.
+binaries for nunit 2.5.7 included.
 
-If you want to help me you are welcome.
+
+blog: http://tonyxzt.blogspot.com/2010/11/nunit-growl-notification.html
 
 
 
