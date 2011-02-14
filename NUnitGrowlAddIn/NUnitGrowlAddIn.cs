@@ -57,7 +57,11 @@ namespace NUnitGrowlAddIn
                                                                                    new NotificationType("NUnit.TestRun.Started"), 
                                                                                    new NotificationType("NUnit.TestRun.Succeeded"), 
                                                                                    new NotificationType("NUnit.TestRun.Failed"), 
-                                                                                   new NotificationType("NUnit.TestRun.FirstTestFailed") };
+                                                                                   new NotificationType("NUnit.TestRun.FirstTestFailed"),
+                                                                                   new NotificationType("NUnit.TestRun.Exception")
+
+                };
+                
                 NotificationType[] notificationTypes = notificationTypeArr1;
                 growlConnector.Register(growlApplication, notificationTypes);
 
@@ -84,6 +88,22 @@ namespace NUnitGrowlAddIn
 
         private void NotifyTestRunFailure(TestResult result)
         {
+        	
+         	        	        	
+        	  string message =  result.FullName+"\n";    
+        	  
+            message+="test executed: "+result.Test.TestCount+"\n";
+            message+="test time: "+result.Time+"\n";
+            message+= "failed : " + this.failureCounter+"\n";
+            message += "error : " + this.errorCounter + "\n";
+            message += "success: "+this.successCounter+"\n";
+        	 string name = "";
+            Bitmap image;
+            name = "NUnit.TestRun.Failed";
+            image = Resources.thumbupred;
+        	 string messageId = NUnitGrowlAddIn.GetNewMessageId();
+            Notification notification = new Notification("NUnit", name, messageId, "NUnit test run.", message, image, false, Priority.Normal, messageId);
+            growlConnector.Notify(notification);
           
         }
 
@@ -101,35 +121,53 @@ namespace NUnitGrowlAddIn
 
         public void RunFinished(TestResult result)
         {
+        	
 
-            string message =  Path.GetFileName(result.FullName)+"\n";                 
+			try {
+
+            string message = result.FullName +"\n";  
+            
             message+="test executed: "+result.Test.TestCount+"\n";
             message+="test time: "+result.Time+"\n";
             message+= "failed : " + this.failureCounter+"\n";
             message += "error : " + this.errorCounter + "\n";
             message += "success: "+this.successCounter+"\n";
 
+
+            
             string messageId = NUnitGrowlAddIn.GetNewMessageId();
             string name = "";
             Bitmap image;
 
             if (result.IsSuccess)
             {
+
                 name = "NUnit.TestRun.Succeeded";
                 image = Resources.thumbup;
-            } else
-            {
-                name = "NUnit.TestRun.Failed";
-                image = Resources.thumbupred;
-            }
+                
+                Notification notification = new Notification("NUnit", name, messageId, "NUnit test run.", message, image, false, Priority.Normal, messageId);
+                growlConnector.Notify(notification);
+		
+                
+            } 
+            
+//            else
+//            {
+//                name = "NUnit.TestRun.Failed";
+//                image = Resources.thumbupred;
+//            }
+//
+//            Notification notification = new Notification("NUnit", name, messageId, "NUnit test run.", message, image, false, Priority.Normal, messageId);
+//            growlConnector.Notify(notification);
+			} catch (Exception e)
+			{
+        		string messageId  = GetNewMessageId();
+        		
+        		Notification notification = new Notification("NUnit", "NUnit.TestRun.Exception", messageId, "NUnit addin test internal error", e.Message, null, false, Priority.High, messageId);
+            		
+			}
 
-            Notification notification = new Notification("NUnit", name, messageId, "NUnit test run.", message, image, false, Priority.Normal, messageId);
-            growlConnector.Notify(notification);
         }
-
-
-
-
 
 
 
@@ -145,13 +183,11 @@ namespace NUnitGrowlAddIn
 
         public void RunStarted(string name, int testCount)
         {
-
+        	
         }
 
         public void SuiteFinished(TestResult result)
         {
-
-            // trial
         }
 
         public void SuiteStarted(TestName testName)
@@ -165,52 +201,59 @@ namespace NUnitGrowlAddIn
 
         public void TestFinished(TestResult result)
         {
-            if (result.IsSuccess)
-            {
-                this.successCounter++;
-            }
 
-            if (result.IsFailure)
-            {
-                this.failureCounter++;
-            }
+        	try {
+        		
+        		if (result.IsSuccess)
+        		{
+        			this.successCounter++;
+        		}
 
-            if (result.IsError)
-            {
-                this.errorCounter++;
-            }
+        		if (result.IsFailure)
+        		{
+        			this.failureCounter++;
+        		}
 
+        		if (result.IsError)
+        		{
+        			this.errorCounter++;
+        		}
+        		if (!result.IsSuccess)
+        		{
+        			
+        			string message = result.FullName;
 
-            if (result.IsFailure)
-            {
-                string message = Path.GetFileName(result.FullName);
-                string resmessage = result.Message;
-                string messageId = NUnitGrowlAddIn.GetNewMessageId();
-                Bitmap bmp = null;
+        			string resmessage = result.Message;
+        			string messageId = NUnitGrowlAddIn.GetNewMessageId();
+        			Bitmap bmp = null;
+        			
+        			Notification notification = new Notification("NUnit", "NUnit.TestRun.Failed", messageId, "NUnit test error.", message + " " + resmessage, Properties.Resources.thumbupred, false, Priority.Normal, messageId);
 
-                Notification notification = new Notification("NUnit", "NUnit.TestRun.Failed", messageId, "NUnit test error.", message + " " + resmessage, Properties.Resources.thumbupred, false, Priority.Normal, messageId);
+        			growlConnector.Notify(notification);
+//
+        		}
+        	} catch (Exception e)
+        	{
+        		string messageId  = GetNewMessageId();        		
+        		Notification notification = new Notification("NUnit", "NUnit.TestRun.Exception", messageId, "NUnit addin test internal error", e.Message, null, false, Priority.High, messageId);            		
+        		
+        	}
 
-                growlConnector.Notify(notification);
-
-            }
-
+        	
         }
 
         public void TestOutput(TestOutput testOutput)
         {
-
-
         }
 
         public void TestStarted(TestName testName)
         {
-
         }
 
         public void UnhandledException(Exception exception)
         {
+        	
 
-            //todo
         }
 
         private static string GetNewMessageId()
